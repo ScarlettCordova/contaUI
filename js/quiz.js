@@ -236,6 +236,7 @@ function iniciarCuestionarioPorTema(tema) {
   obtenerElemento("quizTitulo").innerText =
     "Quiz: " + obtenerNombreTema(temaSeleccionado);
 
+  iniciarTemporizadorQuiz();
   mostrarPantallaQuiz("quizPreguntas");
   pintarPregunta();
 }
@@ -535,7 +536,7 @@ function cargarUltimasNotasTemas() {
       let nota = obtenerUltimaNotaTema(mapa[i].tema);
 
       if (nota === null) {
-        elemento.innerText = "Sin intento";
+        elemento.innerText = "";
         elemento.classList.remove("has-score");
       } else {
         elemento.innerText = nota.correctas + "/" + nota.total;
