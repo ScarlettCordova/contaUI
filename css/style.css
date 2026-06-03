@@ -279,10 +279,6 @@ a {
   padding: 6px 10px;
   background: var(--blue-light);
   color: rgb(255, 255, 255);
-
-  &:hover {
-    background: var(--blue-hover);
-  }
 }
 
 .menu-btn {
@@ -343,10 +339,6 @@ a {
   background: white;
   color: black;
   transition: transform 0.5s ease;
-
-  &:hover {
-    transform: scale(0.9);
-  }
 }
 
 .secondary-btn {
@@ -354,10 +346,6 @@ a {
   color: var(--text);
   border: 1px solid var(--border);
   transition: transform 0.5s ease;
-
-  &:hover {
-    transform: scale(0.9);
-  }
 }
 
 .secondary-btn.reforzar {
@@ -365,20 +353,12 @@ a {
   color: #fafafa;
   border: 1px solid var(--border);
   transition: transform 0.5s ease;
-
-  &:hover {
-    transform: scale(0.9);
-  }
 }
 
 .secondary-btn.danger {
   background: #ef4444;
   color: #fafafa;
   transition: transform 0.5s ease;
-
-  &:hover {
-    transform: scale(0.9);
-  }
 }
 
 /* ======================================================
@@ -420,21 +400,6 @@ a {
   font-family: caveat, sans-serif;
   z-index: 999;
   transform: rotate(30deg);
-
-  & img {
-    width: 60px;
-    height: 50px;
-
-    border-radius: 8px;
-    padding: 2px;
-  }
-
-  & p {
-    margin-top: -15px;
-    font-size: 20px;
-    font-weight: bold;
-    width: 80px;
-  }
 }
 
 .hero-content h1 {
@@ -490,13 +455,6 @@ a {
   display: flex;
   gap: 15px;
   align-items: center;
-
-  & p {
-    margin-top: 0;
-    font-weight: bold;
-    color: var(--text);
-    font-size: 25px;
-  }
 }
 
 .brands-list img {
@@ -1134,11 +1092,6 @@ a {
   margin-top: 20px;
   display: flex;
   gap: 25px;
-
-  & i:hover {
-    color: var(--blue);
-    transform: scale(1.2);
-  }
 }
 
 .footer-options span {
@@ -1154,10 +1107,6 @@ a {
   flex-direction: column;
   gap: 8px;
   margin-top: 8px;
-
-  & li:hover {
-    color: var(--blue);
-  }
 }
 
 .footer p {
@@ -1174,109 +1123,6 @@ a {
 
 /* ======================================================
   RESPONSIVE
-====================================================== */
-@media (max-width: 1180px) {
-  .search-box {
-    display: none;
-  }
-
-  .hero-grid {
-    grid-template-columns: 70px 1fr;
-  }
-
-  .hero-panel {
-    grid-column: 2;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .docs-view.view--active {
-    grid-template-columns: 250px minmax(0, 1fr);
-  }
-
-  .docs-aside {
-    display: none;
-  }
-}
-
-@media (max-width: 880px) {
-  .topbar__inner {
-    padding: 0 16px;
-  }
-
-  .menu-btn {
-    display: inline-flex;
-  }
-
-  .main-nav {
-    position: absolute;
-    top: 66px;
-    left: 0;
-    right: 0;
-    display: none;
-    padding: 16px;
-    background: rgba(11, 15, 13, 0.98);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .main-nav.open {
-    display: grid;
-  }
-
-  .nav-link {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .dropdown-panel {
-    position: static;
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  .login-btn {
-    display: none;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr;
-    padding: 38px 20px;
-  }
-
-  .left-rail {
-    display: none;
-  }
-
-  .hero-panel,
-  .category-grid,
-  .feature-grid,
-  .quiz-layout,
-  .docs-card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .docs-view.view--active {
-    grid-template-columns: 1fr;
-  }
-
-  .docs-sidebar {
-    position: static;
-    height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .docs-content {
-    padding: 34px 22px 70px;
-  }
-
-  .footer {
-    flex-direction: column;
-    padding: 32px 22px;
-  }
-}
-
-/* ======================================================
-  AJUSTES NUEVOS
 ====================================================== */
 
 /* Soluciona el bug donde el dropdown se cerraba al mover lento el mouse.
@@ -1764,17 +1610,6 @@ a {
   height: 100%;
 }
 
-@media (max-width: 880px) {
-  .resource-box,
-  .coming-soon-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .coming-soon-card {
-    padding: 32px 22px;
-  }
-}
-
 /* ======================================================
   THEME: LIGHT / DARK MODE
 ====================================================== */
@@ -1917,17 +1752,6 @@ a {
   display: inline;
 }
 
-@media (max-width: 1180px) {
-  .theme-toggle--nav span {
-    display: none;
-  }
-
-  .theme-toggle--nav {
-    width: 42px;
-    padding: 0;
-  }
-}
-
 /* ======================================================
   EJEMPLOS DINÁMICOS DE RECURSOS
 ====================================================== */
@@ -1985,10 +1809,6 @@ a {
 
 .correctResultTable {
   background: rgba(22, 163, 74, 0.18) !important;
-
-  & strong {
-    color: white;
-  }
 }
 
 .calc-result div {
@@ -2214,23 +2034,6 @@ a {
 .consulta-table td {
   color: var(--text);
   background: var(--bg-card);
-}
-
-@media (max-width: 900px) {
-  .calc-grid,
-  .calc-result,
-  .form-grid-system,
-  .summary-grid-system,
-  .sistema-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sistema-sidebar {
-    position: static;
-    height: auto;
-    border-left: 0;
-    border-top: 1px solid var(--border);
-  }
 }
 
 /* ======================================================
@@ -2633,31 +2436,6 @@ a {
   color: var(--text-3);
 }
 
-@media (max-width: 900px) {
-  .sistema-layout-left {
-    grid-template-columns: 1fr;
-  }
-
-  .sistema-sidebar-left {
-    position: static;
-    height: auto;
-  }
-
-  .sistema-main {
-    padding: 18px;
-  }
-
-  .form-grid-system,
-  .form-grid-system.mini-grid,
-  .consulta-card {
-    grid-template-columns: 1fr;
-  }
-
-  .sistema-topbar {
-    padding: 0 12px;
-  }
-}
-
 /* ======================================================
   MEJORAS FINALES QUIZ + TEMA INDEX
 ====================================================== */
@@ -2823,12 +2601,6 @@ a {
   background: #fee2e2;
 }
 
-@media (max-width: 880px) {
-  .quiz-timer {
-    width: max-content;
-  }
-}
-
 /* ======================================================
   MODALES DE CONFIRMACIÓN
 ====================================================== */
@@ -2916,6 +2688,272 @@ a {
   display: none;
 }
 
+/* ======================================================
+  NUEVO: botón cerrar sesión del quiz
+====================================================== */
+.quiz-logout-btn {
+  min-height: 38px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 18px;
+  color: #ffffff;
+  background: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform ease 0.5s ease;
+}
+
+.quiz-logout-btn:hover {
+  color: white;
+  transform: translateY(-2px);
+}
+
+:root[data-theme="light"] .quiz-logout-btn {
+  color: #991b1b;
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+:root[data-theme="light"] .quiz-logout-btn:hover {
+  color: white;
+  background: #dc2626;
+}
+
+.docs-sidebar-toggle,
+.docs-sidebar-backdrop,
+.system-sidebar-toggle,
+.system-sidebar-backdrop {
+  display: none;
+}
+
+/* ======================================================
+  VALIDATE
+====================================================== */
+
+.input-error {
+  border: 1px solid #ef4444;
+}
+
+.error-text {
+  color: #ef4444;
+  font-weight: normal;
+}
+
+:root {
+  --focus-yellow: #ffd166;
+}
+
+/* Total con más enfoque */
+.total-final {
+  align-items: center;
+}
+
+.total-final strong,
+#pagoTotal,
+#resIvaPagar,
+.consulta-total {
+  margin-left: auto;
+  color: var(--focus-yellow) !important;
+  font-size: 24px;
+  font-weight: 900;
+  text-align: right;
+}
+
+/* Modal */
+.system-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.system-modal.show {
+  display: grid;
+}
+
+.system-modal-card {
+  position: relative;
+  width: min(460px, 100%);
+  padding: 32px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.system-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  color: var(--text-3);
+  background: var(--bg-card-2);
+  border-radius: 50%;
+}
+
+.system-modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  color: #111827;
+  background: var(--focus-yellow);
+  border-radius: 50%;
+  font-size: 34px;
+}
+
+.system-modal-card h2 {
+  color: var(--text-3);
+}
+
+.system-modal-card p {
+  margin-top: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.system-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* Correcciones light mode del sistema */
+:root[data-theme="light"] {
+  --text-3: #111827;
+  --text-2: #64748b;
+}
+
+:root[data-theme="light"] .sistema-body,
+:root[data-theme="light"] .system-panel,
+:root[data-theme="light"] .sistema-sidebar-left,
+:root[data-theme="light"] .totales-sri-box,
+:root[data-theme="light"] .payment-summary,
+:root[data-theme="light"] .system-modal-card {
+  background: #ffffff;
+  color: #111827;
+}
+
+:root[data-theme="light"] .sri-form-table {
+  background: #ffffff;
+}
+
+:root[data-theme="light"] .sri-row {
+  color: #111827;
+}
+
+:root[data-theme="light"]
+  .sri-row:nth-child(even):not(.sri-head):not(.sri-total) {
+  background: #f8fafc;
+}
+
+:root[data-theme="light"] .total-final strong,
+:root[data-theme="light"] #pagoTotal,
+:root[data-theme="light"] #resIvaPagar,
+:root[data-theme="light"] .consulta-total {
+  color: #b7791f !important;
+}
+
+/* ======================================================
+  NORMALIZACIÓN DE SELECTORES ANIDADOS
+  Se separaron reglas tipo SCSS (&:hover, & img, etc.) para que el CSS sea válido.
+====================================================== */
+.login-btn:hover {
+  background: var(--blue-hover);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.secondary-btn.reforzar:hover,
+.secondary-btn.danger:hover {
+  transform: scale(0.9);
+}
+
+.hero-brand img {
+  width: 60px;
+  height: 50px;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.hero-brand p {
+  margin-top: -15px;
+  font-size: 20px;
+  font-weight: bold;
+  width: 80px;
+}
+
+.brands-list p {
+  margin-top: 0;
+  font-weight: bold;
+  color: var(--text);
+  font-size: 25px;
+}
+
+.footer-sections .footer-icons i:hover {
+  color: var(--blue);
+  transform: scale(1.2);
+}
+
+.footer-options ul li:hover {
+  color: var(--blue);
+}
+
+.correctResultTable strong {
+  color: white;
+}
+
+/* ======================================================
+  RESPONSIVE CONSOLIDADO
+  Breakpoints agrupados en un solo bloque por ancho.
+====================================================== */
+
+/* ---------- (max-width: 1180px) ---------- */
+@media (max-width: 1180px) {
+  .search-box {
+    display: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: 70px 1fr;
+  }
+
+  .hero-panel {
+    grid-column: 2;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .docs-view.view--active {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .docs-aside {
+    display: none;
+  }
+
+  .theme-toggle--nav span {
+    display: none;
+  }
+
+  .theme-toggle--nav {
+    width: 42px;
+    padding: 0;
+  }
+}
+
+/* ---------- (max-width: 1100px) ---------- */
 @media (max-width: 1100px) {
   .topbar {
     padding: 0 14px;
@@ -2967,7 +3005,247 @@ a {
   }
 }
 
+/* ---------- (max-width: 900px) ---------- */
+@media (max-width: 900px) {
+  .calc-grid,
+  .calc-result,
+  .form-grid-system,
+  .summary-grid-system,
+  .sistema-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sistema-sidebar {
+    position: static;
+    height: auto;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .sistema-layout-left {
+    grid-template-columns: 1fr;
+  }
+
+  .sistema-sidebar-left {
+    position: static;
+    height: auto;
+  }
+
+  .sistema-main {
+    padding: 18px;
+  }
+
+  .form-grid-system,
+  .form-grid-system.mini-grid,
+  .consulta-card {
+    grid-template-columns: 1fr;
+  }
+
+  .sistema-topbar {
+    padding: 0 12px;
+  }
+
+  .docs-view.view--active {
+    display: block;
+  }
+
+  .docs-sidebar-toggle {
+    position: sticky;
+    top: 76px;
+    z-index: 90;
+    width: 60px;
+    min-height: 45px;
+    margin: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: white;
+    background: var(--blue-light);
+    border-radius: 8px;
+    font-weight: 700;
+  }
+
+  .docs-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0;
+    z-index: 170;
+    width: min(320px, 86vw);
+    height: 100vh !important;
+    padding: 24px;
+    overflow-y: auto;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    transform: translateX(-105%);
+    transition: transform 0.28s ease;
+  }
+
+  .docs-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .docs-sidebar-backdrop.show {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: block;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(4px);
+  }
+
+  .docs-content {
+    padding: 24px 18px 60px;
+  }
+
+  .docs-aside {
+    display: none;
+  }
+
+  .system-sidebar-toggle {
+    position: sticky;
+    top: 64px;
+    z-index: 90;
+    width: calc(100% - 28px);
+    min-height: 46px;
+    margin: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: white;
+    background: var(--blue-light);
+    border-radius: 8px;
+    font-weight: 700;
+  }
+
+  .sistema-layout-left {
+    display: block !important;
+  }
+
+  .sistema-sidebar-left {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0;
+    z-index: 170;
+    width: min(320px, 86vw);
+    height: 100vh !important;
+    padding: 24px;
+    overflow-y: auto;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    transform: translateX(-105%);
+    transition: transform 0.28s ease;
+  }
+
+  .sistema-sidebar-left.open {
+    transform: translateX(0);
+  }
+
+  .system-sidebar-backdrop.show {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    display: block;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(4px);
+  }
+
+  .sistema-main {
+    padding: 18px;
+  }
+}
+
+/* ---------- (max-width: 880px) ---------- */
 @media (max-width: 880px) {
+  .topbar__inner {
+    padding: 0 16px;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: 66px;
+    left: 0;
+    right: 0;
+    display: none;
+    padding: 16px;
+    background: rgba(11, 15, 13, 0.98);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .main-nav.open {
+    display: grid;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .dropdown-panel {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .login-btn {
+    display: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    padding: 38px 20px;
+  }
+
+  .left-rail {
+    display: none;
+  }
+
+  .hero-panel,
+  .category-grid,
+  .feature-grid,
+  .quiz-layout,
+  .docs-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-view.view--active {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .docs-content {
+    padding: 34px 22px 70px;
+  }
+
+  .footer {
+    flex-direction: column;
+    padding: 32px 22px;
+  }
+
+  .resource-box,
+  .coming-soon-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coming-soon-card {
+    padding: 32px 22px;
+  }
+
+  .quiz-timer {
+    width: max-content;
+  }
+
   body {
     overflow-x: hidden;
   }
@@ -3201,6 +3479,7 @@ a {
   }
 }
 
+/* ---------- (max-width: 520px) ---------- */
 @media (max-width: 520px) {
   .hero-actions,
   .offer-actions,
@@ -3248,162 +3527,7 @@ a {
     justify-content: center;
     margin-bottom: 15px;
   }
-}
 
-/* ======================================================
-  NUEVO: botón cerrar sesión del quiz
-====================================================== */
-.quiz-logout-btn {
-  min-height: 38px;
-  padding: 0 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 12px 0 18px;
-  color: #ffffff;
-  background: #dc2626;
-  border: 1px solid rgba(220, 38, 38, 0.35);
-  border-radius: 999px;
-  font-weight: 600;
-  transition: transform ease 0.5s ease;
-}
-
-.quiz-logout-btn:hover {
-  color: white;
-  transform: translateY(-2px);
-}
-
-:root[data-theme="light"] .quiz-logout-btn {
-  color: #991b1b;
-  background: #fee2e2;
-  border-color: #fecaca;
-}
-
-:root[data-theme="light"] .quiz-logout-btn:hover {
-  color: white;
-  background: #dc2626;
-}
-
-.docs-sidebar-toggle,
-.docs-sidebar-backdrop,
-.system-sidebar-toggle,
-.system-sidebar-backdrop {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .docs-view.view--active {
-    display: block;
-  }
-
-  .docs-sidebar-toggle {
-    position: sticky;
-    top: 76px;
-    z-index: 90;
-    width: 60px;
-    min-height: 45px;
-    margin: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: white;
-    background: var(--blue-light);
-    border-radius: 8px;
-    font-weight: 700;
-  }
-
-  .docs-sidebar {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0;
-    z-index: 170;
-    width: min(320px, 86vw);
-    height: 100vh !important;
-    padding: 24px;
-    overflow-y: auto;
-    background: var(--bg-card);
-    border-right: 1px solid var(--border);
-    transform: translateX(-105%);
-    transition: transform 0.28s ease;
-  }
-
-  .docs-sidebar.open {
-    transform: translateX(0);
-  }
-
-  .docs-sidebar-backdrop.show {
-    position: fixed;
-    inset: 0;
-    z-index: 150;
-    display: block;
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(4px);
-  }
-
-  .docs-content {
-    padding: 24px 18px 60px;
-  }
-
-  .docs-aside {
-    display: none;
-  }
-
-  .system-sidebar-toggle {
-    position: sticky;
-    top: 64px;
-    z-index: 90;
-    width: calc(100% - 28px);
-    min-height: 46px;
-    margin: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: white;
-    background: var(--blue-light);
-    border-radius: 8px;
-    font-weight: 700;
-  }
-
-  .sistema-layout-left {
-    display: block !important;
-  }
-
-  .sistema-sidebar-left {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0;
-    z-index: 170;
-    width: min(320px, 86vw);
-    height: 100vh !important;
-    padding: 24px;
-    overflow-y: auto;
-    background: var(--bg-card);
-    border-right: 1px solid var(--border);
-    transform: translateX(-105%);
-    transition: transform 0.28s ease;
-  }
-
-  .sistema-sidebar-left.open {
-    transform: translateX(0);
-  }
-
-  .system-sidebar-backdrop.show {
-    position: fixed;
-    inset: 0;
-    z-index: 150;
-    display: block;
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(4px);
-  }
-
-  .sistema-main {
-    padding: 18px;
-  }
-}
-
-@media (max-width: 520px) {
   .docs-sidebar,
   .sistema-sidebar-left {
     width: 88vw;
@@ -3413,141 +3537,4 @@ a {
   .system-sidebar-toggle {
     font-size: 25px;
   }
-}
-
-/* ======================================================
-  VALIDATE
-====================================================== */
-
-.input-error {
-  border: 1px solid #ef4444;
-}
-
-.error-text {
-  color: #ef4444;
-  font-weight: normal;
-}
-
-:root {
-  --focus-yellow: #ffd166;
-}
-
-/* Total con más enfoque */
-.total-final {
-  align-items: center;
-}
-
-.total-final strong,
-#pagoTotal,
-#resIvaPagar,
-.consulta-total {
-  margin-left: auto;
-  color: var(--focus-yellow) !important;
-  font-size: 24px;
-  font-weight: 900;
-  text-align: right;
-}
-
-/* Modal */
-.system-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  display: none;
-  place-items: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.62);
-  backdrop-filter: blur(8px);
-}
-
-.system-modal.show {
-  display: grid;
-}
-
-.system-modal-card {
-  position: relative;
-  width: min(460px, 100%);
-  padding: 32px;
-  text-align: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-}
-
-.system-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  color: var(--text-3);
-  background: var(--bg-card-2);
-  border-radius: 50%;
-}
-
-.system-modal-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 18px;
-  display: grid;
-  place-items: center;
-  color: #111827;
-  background: var(--focus-yellow);
-  border-radius: 50%;
-  font-size: 34px;
-}
-
-.system-modal-card h2 {
-  color: var(--text-3);
-}
-
-.system-modal-card p {
-  margin-top: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.system-modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-
-/* Correcciones light mode del sistema */
-:root[data-theme="light"] {
-  --text-3: #111827;
-  --text-2: #64748b;
-}
-
-:root[data-theme="light"] .sistema-body,
-:root[data-theme="light"] .system-panel,
-:root[data-theme="light"] .sistema-sidebar-left,
-:root[data-theme="light"] .totales-sri-box,
-:root[data-theme="light"] .payment-summary,
-:root[data-theme="light"] .system-modal-card {
-  background: #ffffff;
-  color: #111827;
-}
-
-:root[data-theme="light"] .sri-form-table {
-  background: #ffffff;
-}
-
-:root[data-theme="light"] .sri-row {
-  color: #111827;
-}
-
-:root[data-theme="light"]
-  .sri-row:nth-child(even):not(.sri-head):not(.sri-total) {
-  background: #f8fafc;
-}
-
-:root[data-theme="light"] .total-final strong,
-:root[data-theme="light"] #pagoTotal,
-:root[data-theme="light"] #resIvaPagar,
-:root[data-theme="light"] .consulta-total {
-  color: #b7791f !important;
 }
