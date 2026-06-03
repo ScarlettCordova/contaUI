@@ -1,28 +1,438 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mini sistema | ContaFácil104</title>
+
+  <title>Sistema educativo | Conta UI</title>
+
+  <script>
+    (function () {
+      var temaSistema = localStorage.getItem("temaSistemaContaUI") || "light";
+      document.documentElement.setAttribute("data-theme", temaSistema);
+    })();
+  </script>
+
+  <link rel="shortcut icon" href="assets/favicon.png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <main class="coming-soon-page">
-    <section class="coming-soon-card">
-      <span class="eyebrow">404: Próximamente</span>
+<body class="sistema-body">
 
-      <h2>Sistema en construcción</h2>
+  <header class="sistema-topbar">
+    <a href="index.html" class="sistema-brand">
+      <i class='bx bx-left-arrow-alt'></i>
+      <span>Conta UI</span>
+    </a>
 
+    <div class="sistema-top-actions">
+      <button class="theme-toggle sistema-theme-btn" onclick="cambiarTemaSistema()" id="themeSistemaBtn" title="Cambiar tema">
+        <i class='bx bx-moon'></i>
+      </button>
+
+      <button class="secondary-btn danger" onclick="limpiarSistemaDemo()">
+        Reiniciar demo
+      </button>
+    </div>
+  </header>
+
+  <button class="system-sidebar-toggle" id="btnToggleSistemaSidebar" onclick="alternarSidebarSistemaMobile()">
+    <i class='bx bx-menu-alt-left'></i>
+  </button>
+
+  <div class="system-sidebar-backdrop" id="systemSidebarBackdrop" onclick="cerrarSidebarSistemaMobile()"></div>
+
+  <div class="sistema-layout sistema-layout-left">
+    <!-- SIDEBAR IZQUIERDO -->
+    <aside class="sistema-sidebar-left">
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar">
+          <i class='bx bx-user'></i>
+        </div>
+        <div>
+          <strong id="sidebarContribuyente">Sin configurar</strong>
+          <span id="sidebarRegimen">Seleccione régimen</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <button id="btnConfigSistema" class="active" onclick="mostrarModuloSistema('configuracion')">
+          <i class='bx bx-cog'></i>
+          Configuración
+        </button>
+
+        <div class="sidebar-dropdown">
+          <button onclick="alternarSubmenuSistema('submenuDeclaraciones')">
+            <i class='bx bx-folder-open'></i>
+            Declaraciones
+            <i class='bx bx-chevron-down'></i>
+          </button>
+
+          <div id="submenuDeclaraciones" class="sidebar-submenu open">
+            <button id="btnFormSistema" onclick="mostrarModuloSistema('formulario104')">
+              <i class='bx bx-file'></i>
+              Formulario 104
+            </button>
+
+            <button id="btnConsultasSistema" onclick="mostrarModuloSistema('consultas')">
+              <i class='bx bx-search-alt'></i>
+              Consultas
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="sidebar-help">
+        <i class='bx bx-info-circle'></i>
+        <p>
+          Demo educativo. No envía información real al SRI.
+        </p>
+      </div>
+    </aside>
+
+    <main class="sistema-main">
+
+      <!-- CONFIGURACIÓN -->
+      <section id="viewConfiguracion" class="system-view active">
+        <div class="system-panel">
+          <span class="eyebrow">Paso inicial</span>
+          <h1>Configuración del contribuyente</h1>
+          <p>
+            Registra los datos básicos del contribuyente. Esta información se usará
+            para simular una declaración de IVA.
+          </p>
+
+          <div class="form-grid-system">
+            <label>
+              Nombre *
+              <input class="contaui-input" type="text" id="cfgNombre" placeholder="Ejemplo: Cristian" onblur="validarCampo('cfgNombre','txtNombre','El nombre es obligatorio')">
+              <small id="txtNombre"></small>
+            </label>
+
+            <label>
+              Apellido *
+              <input class="contaui-input" type="text" id="cfgApellido" placeholder="Ejemplo: Peña"  onblur="validarCampo('cfgApellido','txtApellido','El Apellido es obligatorio')">
+              <small id="txtApellido"></small>
+            </label>
+
+            <label>
+              Razón social *
+              <input class="contaui-input" type="text" id="cfgRazonSocial" placeholder="Ejemplo: Conta UI" onblur="validarCampo('cfgRazonSocial','txtRazonSocial','El campo es obligatorio')">
+              <small id="txtRazonSocial"></small>
+            </label>
+
+            <label>
+              RUC *
+              <input class="contaui-input" type="text" id="cfgRuc" placeholder="Ejemplo: 1050174901001" maxlength="13"  onblur="validarCampo('cfgRuc','txtRuc','El Ruc debe contener 13 digitos')">
+              <small id="txtRuc"></small>
+            </label>
+
+            <label>
+              Régimen perteneciente *
+              <select class="contaui-select" id="cfgRegimen">
+                <option value="">Seleccione régimen</option>
+                <option value="general">Régimen General</option>
+                <option value="negocio-popular">RIMPE Negocio Popular</option>
+                <option value="rimpe">RIMPE Emprendedor</option>
+              </select>
+            </label>
+            <small id="txtRegimen"></small>
+          </div>
+
+          <div class="form-actions-system">
+            <button class="primary-btn" onclick="guardarConfiguracionSistema()">
+              Guardar configuración
+            </button>
+
+            <button class="secondary-btn" onclick="irFormularioDesdeConfig()">
+              Ir a Formulario 104
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORMULARIO 104 -->
+      <section id="viewFormulario104" class="system-view">
+        <div class="system-panel">
+          <span class="eyebrow">Declaraciones / Formulario 104</span>
+
+          <div class="step-tabs">
+            <button id="tabPeriodo" class="active" onclick="mostrarPaso104('periodo')">1. Período fiscal</button>
+            <button id="tabPreguntas" onclick="mostrarPaso104('preguntas')">2. Preguntas</button>
+            <button id="tabFormulario" onclick="mostrarPaso104('formulario')">3. Formulario</button>
+            <button id="tabPago" onclick="mostrarPaso104('pago')">4. Pago</button>
+          </div>
+
+          <!-- PASO PERIODO -->
+          <div id="pasoPeriodo" class="form104-step active">
+            <h2>Período fiscal</h2>
+            <p>Seleccione la obligación y el período a declarar.</p>
+
+            <div class="form-grid-system">
+              <label>
+                Obligación *
+                <select class="contaui-select" id="periodoObligacion">
+                  <option value="">Seleccione obligación</option>
+                  <option value="2011">2011 - Declaración mensual de IVA</option>
+                  <option value="2021">2021 - Declaración semestral de IVA</option>
+                </select>
+              </label>
+
+              <label>
+                Mes *
+                <select class="contaui-select" id="periodoMes">
+                  <option value="">Seleccione mes</option>
+                  <option value="Enero">Enero</option>
+                  <option value="Febrero">Febrero</option>
+                  <option value="Marzo">Marzo</option>
+                  <option value="Abril">Abril</option>
+                  <option value="Mayo">Mayo</option>
+                  <option value="Junio">Junio</option>
+                  <option value="Julio">Julio</option>
+                  <option value="Agosto">Agosto</option>
+                  <option value="Septiembre">Septiembre</option>
+                  <option value="Octubre">Octubre</option>
+                  <option value="Noviembre">Noviembre</option>
+                  <option value="Diciembre">Diciembre</option>
+                </select>
+              </label>
+
+              <label>
+                Año fiscal *
+                <input class="contaui-input" type="number" id="periodoAnio" value="2026" min="2020" max="2035">
+              </label>
+            </div>
+
+            <div class="form-actions-system">
+              <button class="primary-btn" onclick="continuarDesdePeriodo()">Continuar</button>
+            </div>
+          </div>
+
+          <!-- PASO PREGUNTAS -->
+          <div id="pasoPreguntas" class="form104-step">
+            <h2>Preguntas</h2>
+            <p>Estas preguntas preparan el formulario. Puedes continuar si no deseas profundizar.</p>
+
+            <div class="form-grid-system">
+              <label>
+                ¿Tuviste ventas este período?
+                <select class="contaui-select" id="preguntaVentas">
+                  <option value="">Seleccione</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+
+              <label>
+                ¿Tuviste compras este período?
+                <select class="contaui-select" id="preguntaCompras">
+                  <option value="">Seleccione</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+
+              <label>
+                ¿Tienes crédito tributario anterior?
+                <select class="contaui-select" id="preguntaCredito">
+                  <option value="no">No</option>
+                  <option value="si">Sí</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-actions-system">
+              <button class="secondary-btn" onclick="mostrarPaso104('formulario')">Omitir</button>
+              <button class="primary-btn" onclick="continuarDesdePreguntas()">Continuar</button>
+            </div>
+          </div>
+
+          <!-- PASO FORMULARIO -->
+          <div id="pasoFormulario" class="form104-step">
+            <h2>Formulario</h2>
+            <p>Ingrese valores de ventas y compras. Los totales se actualizan al calcular.</p>
+
+            <div class="sri-form-table">
+              <div class="sri-section-title">
+                <i class='bx bx-chevron-down'></i>
+                VENTAS
+              </div>
+
+              <div class="sri-row sri-head">
+                <span>Resumen de ventas y otras operaciones</span>
+                <span>Código</span>
+                <span>Valor bruto</span>
+                <span>Valor neto</span>
+                <span>Impuesto generado</span>
+              </div>
+
+              <div class="sri-row">
+                <span>Ventas locales gravadas tarifa 15%</span>
+                <span>401</span>
+                <input type="number" id="ventas15" placeholder="0.00" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+                <strong id="netoVentas15">$0.00</strong>
+                <strong id="impVentas15">$0.00</strong>
+              </div>
+
+              <div class="sri-row">
+                <span>Ventas locales gravadas tarifa 0%</span>
+                <span>403</span>
+                <input type="number" id="ventas0" placeholder="0.00" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+                <strong id="netoVentas0">$0.00</strong>
+                <strong>$0.00</strong>
+              </div>
+
+              <div class="sri-row sri-total">
+                <span>Total ventas y otras operaciones</span>
+                <span>409</span>
+                <strong id="totalBrutoVentas">$0.00</strong>
+                <strong id="totalNetoVentas">$0.00</strong>
+                <strong id="totalImpuestoVentas">$0.00</strong>
+              </div>
+
+              <div class="sri-section-title">
+                <i class='bx bx-chevron-down'></i>
+                COMPRAS
+              </div>
+
+              <div class="sri-row sri-head">
+                <span>Resumen de adquisiciones y pagos</span>
+                <span>Código</span>
+                <span>Valor bruto</span>
+                <span>Valor neto</span>
+                <span>Impuesto generado</span>
+              </div>
+
+              <div class="sri-row">
+                <span>Adquisiciones gravadas tarifa 15%</span>
+                <span>500</span>
+                <input type="number" id="compras15" placeholder="0.00" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+                <strong id="netoCompras15">$0.00</strong>
+                <strong id="impCompras15">$0.00</strong>
+              </div>
+
+              <div class="sri-row">
+                <span>Adquisiciones tarifa 0%</span>
+                <span>506</span>
+                <input type="number" id="compras0" placeholder="0.00" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+                <strong id="netoCompras0">$0.00</strong>
+                <strong>$0.00</strong>
+              </div>
+
+              <div class="sri-row sri-total">
+                <span>Total adquisiciones y pagos</span>
+                <span>509</span>
+                <strong id="totalBrutoCompras">$0.00</strong>
+                <strong id="totalNetoCompras">$0.00</strong>
+                <strong id="totalImpuestoCompras">$0.00</strong>
+              </div>
+            </div>
+
+            <div class="form-grid-system mini-grid">
+              <label>
+                Tarifa IVA %
+                <input class="contaui-input" type="number" id="ivaDeclaracion" value="15" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+              </label>
+
+              <label>
+                Crédito tributario anterior
+                <input class="contaui-input" type="number" id="creditoAnterior" value="0" min="0" step="0.01" oninput="calcularFormulario104Sistema()">
+              </label>
+            </div>
+
+            <div class="totales-sri-box">
+              <h3>Resumen impositivo</h3>
+              <div><span>IVA generado en ventas</span><strong id="resIvaVentas">$0.00</strong></div>
+              <div><span>IVA pagado en compras</span><strong id="resIvaCompras">$0.00</strong></div>
+              <div><span>Crédito tributario anterior</span><strong id="resCreditoAnterior">$0.00</strong></div>
+              <div class="total-final"><span>Total impuesto a liquidar</span><strong id="resIvaPagar">$0.00</strong></div>
+            </div>
+
+            <div class="form-actions-system">
+              <button class="secondary-btn" onclick="calcularFormulario104Sistema()">Calcular</button>
+              <button class="primary-btn" onclick="continuarDesdeFormulario()">Continuar a pago</button>
+            </div>
+          </div>
+
+          <!-- PASO PAGO -->
+          <div id="pasoPago" class="form104-step">
+            <h2>Pago</h2>
+            <p>Revise los valores antes de guardar la declaración.</p>
+
+            <div class="payment-summary">
+              <div><span>Contribuyente</span><strong id="pagoContribuyente">Sin configurar</strong></div>
+              <div><span>RUC</span><strong id="pagoRuc">-</strong></div>
+              <div><span>Obligación</span><strong id="pagoObligacion">-</strong></div>
+              <div><span>Período</span><strong id="pagoPeriodo">-</strong></div>
+              <div class="total-final"><span>Total a pagar</span><strong id="pagoTotal">$0.00</strong></div>
+            </div>
+
+            <div class="form-actions-system">
+              <button class="secondary-btn" onclick="mostrarPaso104('formulario')">Volver al formulario</button>
+              <button class="primary-btn" onclick="abrirModalGuardarDeclaracion()">Guardar declaración</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONSULTAS -->
+      <section id="viewConsultas" class="system-view">
+        <div class="system-panel">
+          <span class="eyebrow">Consultas</span>
+          <h1>Declaraciones guardadas</h1>
+          <p>
+            Busca valores a Pagar Aqui
+          </p>
+
+          <div id="listaConsultasSistema" class="consultas-list"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/utilitarios.js"></script>
+  <script src="js/sistema.js"></script>
+
+  <!-- Modal-->
+  <div class="custom-modal" id="sistemaConfirmModal">
+    <div class="custom-modal__card">
+      <div class="custom-modal__icon success">
+        <i class='bx bx-check-shield'></i>
+      </div>
+
+      <h3>Guardar declaración</h3>
       <p>
-        El sistema de facturación, registro de compras, ventas y resumen del
-        Formulario 104 estará disponible próximamente.
+        ¿Confirmas que deseas guardar esta simulación del Formulario 104?
+        Luego el formulario volverá al paso inicial de período fiscal.
       </p>
 
-      <a href="index.html" class="primary-btn">
-        Volver al inicio <i class='bx bx-left-arrow-alt'></i>
-      </a>
-    </section>
-  </main>
+      <div class="custom-modal__actions">
+        <button class="secondary-btn" onclick="cerrarModalGuardarDeclaracion()">Cancelar</button>
+        <button class="primary-btn" onclick="confirmarGuardarDeclaracionSistema()">Sí, guardar</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="system-modal" id="configSuccessModal">
+  <div class="system-modal-card">
+    <button class="system-modal-close" onclick="cerrarModalConfiguracionGuardada()">
+      <i class='bx bx-x'></i>
+    </button>
+
+    <div class="system-modal-icon">
+      <i class='bx bx-check'></i>
+    </div>
+
+    <h2>Configuración guardada</h2>
+    <p>Los datos del contribuyente fueron guardados correctamente. Ahora puedes continuar al Formulario 104.</p>
+
+    <div class="system-modal-actions">
+      <button class="secondary-btn" onclick="cerrarModalConfiguracionGuardada()">Cerrar</button>
+      <button class="primary-btn" onclick="irFormularioDesdeModal()">Ir a Formulario 104</button>
+    </div>
+  </div>
+  </div>
+
 </body>
 </html>

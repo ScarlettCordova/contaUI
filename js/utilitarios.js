@@ -15,7 +15,7 @@ function textoSeguro(id, texto) {
 }
 
 function obtenerValor(id) {
-  let elemento = obtener(id);
+  let elemento = obtenerElemento(id);
 
   if (elemento === null) {
     return "";
@@ -35,7 +35,7 @@ function obtenerNumero(id) {
 }
 
 function mostrarTexto(id, texto) {
-  let elemento = obtener(id);
+  let elemento = obtenerElemento(id);
 
   if (elemento !== null) {
     elemento.innerText = texto;
@@ -47,7 +47,7 @@ function dinero(valor) {
 }
 
 function marcarError(id, mensaje) {
-  let campo = obtener(id);
+  let campo = obtenerElemento(id);
 
   if (campo !== null) {
     campo.classList.add("input-error");
@@ -98,4 +98,24 @@ function validarCampo(idInput, idError, mensaje) {
   error.classList.remove("error-text");
   error.innerText = "";
   return true;
+}
+function validarSelect(idInput) {
+  let input = obtenerElemento(idInput);
+
+  let valor = input.value.trim();
+
+  if (valor === "") {
+    input.classList.add("input-error");
+    return false;
+  }
+  input.classList.remove("input-error");
+  return true;
+}
+
+function validarRucBasico(ruc) {
+  if (ruc.length === 13 && !isNaN(ruc)) {
+    return true;
+  } else {
+    return false;
+  }
 }
