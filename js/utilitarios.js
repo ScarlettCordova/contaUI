@@ -1,5 +1,17 @@
-function obtener(id) {
+function obtenerElemento(id) {
   return document.getElementById(id);
+}
+
+function existeElemento(id) {
+  return obtenerElemento(id) !== null;
+}
+
+function textoSeguro(id, texto) {
+  let elemento = obtenerElemento(id);
+
+  if (elemento !== null) {
+    elemento.innerText = texto;
+  }
 }
 
 function obtenerValor(id) {
@@ -65,4 +77,25 @@ function leerLocal(clave, valorPorDefecto) {
   }
 
   return JSON.parse(datos);
+}
+
+// validaciones
+
+function validarCampo(idInput, idError, mensaje) {
+  let input = obtenerElemento(idInput);
+  let error = obtenerElemento(idError);
+
+  let valor = input.value.trim();
+
+  if (valor === "") {
+    input.classList.add("input-error");
+    error.classList.add("error-text");
+    error.innerText = mensaje;
+    return false;
+  }
+
+  input.classList.remove("input-error");
+  error.classList.remove("error-text");
+  error.innerText = "";
+  return true;
 }

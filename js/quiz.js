@@ -7,9 +7,75 @@ let temaSeleccionado = "todos";
 let preguntasActuales = [];
 let preguntaActual = 0;
 let respuestasUsuario = [];
+let tiempoInicioQuiz = null;
+let intervaloTiempoQuiz = null;
+let accionConfirmadaQuiz = null;
+let ultimoResultadoQuiz = {
+  correctas: 0,
+  total: 0,
+  tiempo: "00:00",
+};
 
-function obtenerElemento(id) {
-  return document.getElementById(id);
+function guardarParticipanteLocal() {
+  localStorage.setItem("participanteQuizContaUI", JSON.stringify(participante));
+}
+
+function prepararQuizAlEntrar() {
+  let guardado = localStorage.getItem("participanteQuizContaUI");
+
+  if (guardado === null) {
+    mostrarPantallaQuiz("quizRegistro");
+    return;
+  }
+
+  participante = JSON.parse(guardado);
+
+  if (participante.nombre === "") {
+    mostrarPantallaQuiz("quizRegistro");
+    return;
+  }
+
+  if (obtenerElemento("nombreParticipante") !== null) {
+    obtenerElemento("nombreParticipante").value = participante.nombre || "";
+  }
+
+  if (obtenerElemento("correoParticipante") !== null) {
+    obtenerElemento("correoParticipante").value = participante.correo || "";
+  }
+
+  if (obtenerElemento("bienvenidaQuiz") !== null) {
+    obtenerElemento("bienvenidaQuiz").innerText =
+      "Bienvenido, " + participante.nombre;
+  }
+
+  cargarUltimasNotasTemas();
+  mostrarPantallaQuiz("quizTemas");
+}
+
+function cargarParticipanteLocal() {
+  let guardado = localStorage.getItem("participanteQuizContaUI");
+
+  if (guardado === null) {
+    return;
+  }
+
+  participante = JSON.parse(guardado);
+
+  if (obtenerElemento("nombreParticipante") !== null) {
+    obtenerElemento("nombreParticipante").value = participante.nombre || "";
+  }
+
+  if (obtenerElemento("correoParticipante") !== null) {
+    obtenerElemento("correoParticipante").value = participante.correo || "";
+  }
+
+  if (
+    obtenerElemento("bienvenidaQuiz") !== null &&
+    participante.nombre !== ""
+  ) {
+    obtenerElemento("bienvenidaQuiz").innerText =
+      "Bienvenido, " + participante.nombre;
+  }
 }
 
 function mostrarPantallaQuiz(idPantalla) {
@@ -19,23 +85,72 @@ function mostrarPantallaQuiz(idPantalla) {
     pantallas[i].classList.remove("quiz-screen--active");
   }
 
-  obtenerElemento(idPantalla).classList.add("quiz-screen--active");
+  let pantalla = obtenerElemento(idPantalla);
+
+  if (pantalla !== null) {
+    pantalla.classList.add("quiz-screen--active");
+  }
+}
+
+function abrirModalQuiz(titulo, texto, accionConfirmacion) {
+  let modal = obtenerElemento("quizConfirmModal");
+
+  if (modal === null) {
+    let continuar = confirm(texto);
+
+    if (continuar && accionConfirmacion !== null) {
+      accionConfirmacion();
+    }
+
+    return;
+  }
+
+  accionConfirmadaQuiz = accionConfirmacion;
+
+  textoSeguro("quizModalTitle", titulo);
+  textoSeguro("quizModalText", texto);
+  modal.classList.add("show");
+}
+
+function cerrarModalQuiz() {
+  let modal = obtenerElemento("quizConfirmModal");
+
+  if (modal !== null) {
+    modal.classList.remove("show");
+  }
+
+  accionConfirmadaQuiz = null;
+}
+
+function confirmarModalQuiz() {
+  if (accionConfirmadaQuiz !== null) {
+    accionConfirmadaQuiz();
+  }
+
+  cerrarModalQuiz();
+}
+
+function prepararModalQuiz() {
+  let boton = obtenerElemento("quizModalConfirmBtn");
+
+  if (boton !== null) {
+    boton.onclick = confirmarModalQuiz;
+  }
 }
 
 function registrarParticipante() {
   let nombre = obtenerElemento("nombreParticipante").value.trim();
   let correo = obtenerElemento("correoParticipante").value.trim();
 
-  if (nombre === "") {
-    alert("Ingresa tu nombre para continuar.");
-    return;
-  }
-
   participante.nombre = nombre;
   participante.correo = correo;
 
+  guardarParticipanteLocal();
+
   obtenerElemento("bienvenidaQuiz").innerText =
     "Bienvenido, " + participante.nombre;
+
+  cargarUltimasNotasTemas();
   mostrarPantallaQuiz("quizTemas");
 }
 
@@ -153,8 +268,27 @@ function pintarPregunta() {
     boton.className = "answer-btn";
     boton.innerText = pregunta.opciones[i];
 
-    if (respuestasUsuario[preguntaActual] === pregunta.opciones[i]) {
-      boton.classList.add("selected");
+    if (respuestasUsuario[preguntaActual] !== null) {
+      boton.disabled = true;
+      boton.classList.add("locked");
+
+      if (pregunta.opciones[i] === pregunta.correcta) {
+        boton.classList.add("correct-answer");
+      }
+
+      if (
+        respuestasUsuario[preguntaActual] === pregunta.opciones[i] &&
+        respuestasUsuario[preguntaActual] !== pregunta.correcta
+      ) {
+        boton.classList.add("wrong-answer");
+      }
+
+      if (
+        respuestasUsuario[preguntaActual] === pregunta.opciones[i] &&
+        respuestasUsuario[preguntaActual] === pregunta.correcta
+      ) {
+        boton.classList.add("selected");
+      }
     }
 
     boton.onclick = function () {
@@ -164,6 +298,7 @@ function pintarPregunta() {
     contenedor.appendChild(boton);
   }
 
+  pintarFeedbackPregunta();
   actualizarPuntaje();
   pintarListaPreguntas();
 }
@@ -176,6 +311,42 @@ function seleccionarRespuesta(indiceRespuesta) {
 
   respuestasUsuario[preguntaActual] = indiceRespuesta;
   pintarPregunta();
+}
+
+function pintarFeedbackPregunta() {
+  let feedbackAnterior = document.querySelector(".question-feedback");
+
+  if (feedbackAnterior !== null) {
+    feedbackAnterior.remove();
+  }
+
+  if (respuestasUsuario[preguntaActual] === null) {
+    return;
+  }
+
+  let pregunta = preguntasActuales[preguntaActual];
+  let esCorrecta = respuestasUsuario[preguntaActual] === pregunta.correcta;
+
+  let feedback = document.createElement("div");
+  feedback.className = "question-feedback";
+
+  if (esCorrecta) {
+    feedback.classList.add("feedback-ok");
+    feedback.innerHTML =
+      "<i class='bx bx-check-circle'></i><span>Correcto. Muy bien, continúa con la siguiente pregunta.</span>";
+  } else {
+    feedback.classList.add("feedback-bad");
+    feedback.innerHTML =
+      "<i class='bx bx-x-circle'></i><span>Respuesta incorrecta. La opción correcta era: <strong>" +
+      pregunta.correcta +
+      "</strong></span>";
+  }
+
+  let card = document.querySelector(".question-card");
+
+  if (card !== null) {
+    card.appendChild(feedback);
+  }
 }
 
 function siguientePregunta() {
@@ -197,6 +368,30 @@ function anteriorPregunta() {
     preguntaActual--;
     pintarPregunta();
   }
+}
+
+function volverASeleccionTemas() {
+  abrirModalQuiz(
+    "¿Volver a temas?",
+    "Si vuelves ahora, perderás el intento actual y deberás iniciar nuevamente el cuestionario.",
+    function () {
+      detenerTemporizadorQuiz();
+      preguntasActuales = [];
+      respuestasUsuario = [];
+      preguntaActual = 0;
+      cargarUltimasNotasTemas();
+      mostrarPantallaQuiz("quizTemas");
+    },
+  );
+}
+
+function volverATemasDesdeResultado() {
+  detenerTemporizadorQuiz();
+  preguntasActuales = [];
+  respuestasUsuario = [];
+  preguntaActual = 0;
+  cargarUltimasNotasTemas();
+  mostrarPantallaQuiz("quizTemas");
 }
 
 function calcularCorrectas() {
@@ -258,15 +453,120 @@ function pintarListaPreguntas() {
   }
 }
 
+function iniciarTemporizadorQuiz() {
+  detenerTemporizadorQuiz();
+
+  tiempoInicioQuiz = Date.now();
+  actualizarTemporizadorQuiz();
+
+  intervaloTiempoQuiz = setInterval(function () {
+    actualizarTemporizadorQuiz();
+  }, 1000);
+}
+
+function detenerTemporizadorQuiz() {
+  if (intervaloTiempoQuiz !== null) {
+    clearInterval(intervaloTiempoQuiz);
+    intervaloTiempoQuiz = null;
+  }
+}
+
+function obtenerTiempoTranscurridoTexto() {
+  if (tiempoInicioQuiz === null) {
+    return ultimoResultadoQuiz.tiempo || "00:00";
+  }
+
+  let segundosTotales = Math.floor((Date.now() - tiempoInicioQuiz) / 1000);
+  let minutos = Math.floor(segundosTotales / 60);
+  let segundos = segundosTotales % 60;
+
+  let minutosTexto = minutos < 10 ? "0" + minutos : minutos;
+  let segundosTexto = segundos < 10 ? "0" + segundos : segundos;
+
+  return minutosTexto + ":" + segundosTexto;
+}
+
+function actualizarTemporizadorQuiz() {
+  let timer = obtenerElemento("quizTimer");
+
+  if (timer !== null) {
+    timer.innerHTML =
+      "<i class='bx bx-time-five'></i> " + obtenerTiempoTranscurridoTexto();
+  }
+}
+
+function obtenerClaveNotaTema(tema) {
+  return "ultimaNotaQuiz_" + tema;
+}
+
+function guardarUltimaNotaTema(tema, correctas, total) {
+  let datos = {
+    correctas: correctas,
+    total: total,
+    fecha: new Date().toLocaleString(),
+  };
+
+  localStorage.setItem(obtenerClaveNotaTema(tema), JSON.stringify(datos));
+}
+
+function obtenerUltimaNotaTema(tema) {
+  let datos = localStorage.getItem(obtenerClaveNotaTema(tema));
+
+  if (datos === null) {
+    return null;
+  }
+
+  return JSON.parse(datos);
+}
+
+function cargarUltimasNotasTemas() {
+  let mapa = [
+    { tema: "todos", id: "scoreTemaTodos" },
+    { tema: "iva", id: "scoreTemaIva" },
+    { tema: "tarifa0", id: "scoreTemaTarifa0" },
+    { tema: "subtotal", id: "scoreTemaSubtotal" },
+    { tema: "formulario104", id: "scoreTemaFormulario104" },
+  ];
+
+  for (let i = 0; i < mapa.length; i++) {
+    let elemento = obtenerElemento(mapa[i].id);
+
+    if (elemento !== null) {
+      let nota = obtenerUltimaNotaTema(mapa[i].tema);
+
+      if (nota === null) {
+        elemento.innerText = "Sin intento";
+        elemento.classList.remove("has-score");
+      } else {
+        elemento.innerText = nota.correctas + "/" + nota.total;
+        elemento.classList.add("has-score");
+      }
+    }
+  }
+}
+
 function finalizarCuestionario() {
   let correctas = calcularCorrectas();
   let total = preguntasActuales.length;
+  let tiempoTexto = obtenerTiempoTranscurridoTexto();
+
+  detenerTemporizadorQuiz();
+
+  ultimoResultadoQuiz.correctas = correctas;
+  ultimoResultadoQuiz.total = total;
+  ultimoResultadoQuiz.tiempo = tiempoTexto;
+
+  guardarUltimaNotaTema(temaSeleccionado, correctas, total);
+  guardarResultadoLocalStorage(correctas, total, tiempoTexto);
+
   let resultadoCard = document.querySelector(".quiz-result-card");
   let botonReforzar = obtenerElemento("btnReforzarTema");
 
-  resultadoCard.classList.remove("success");
-  resultadoCard.classList.remove("warning");
-  resultadoCard.classList.remove("danger");
+  if (resultadoCard !== null) {
+    resultadoCard.classList.remove("success");
+    resultadoCard.classList.remove("warning");
+    resultadoCard.classList.remove("danger");
+  }
 
   botonReforzar.style.display = "none";
 
@@ -299,6 +599,7 @@ function finalizarCuestionario() {
     botonReforzar.style.display = "inline-flex";
   }
 
+  cargarUltimasNotasTemas();
   mostrarPantallaQuiz("quizResultado");
 }
 
@@ -330,4 +631,88 @@ function revisarParametroTema() {
   }
 }
 
+function guardarResultadoLocalStorage(correctas, total, tiempoTexto) {
+  let resultados = localStorage.getItem("resultadosQuizContaUI");
+
+  if (resultados === null) {
+    resultados = [];
+  } else {
+    resultados = JSON.parse(resultados);
+  }
+
+  resultados.push({
+    nombre: participante.nombre,
+    correo: participante.correo,
+    tema: obtenerNombreTema(temaSeleccionado),
+    correctas: correctas,
+    total: total,
+    tiempo: tiempoTexto,
+    fecha: new Date().toLocaleString(),
+  });
+
+  localStorage.setItem("resultadosQuizContaUI", JSON.stringify(resultados));
+}
+
+function enviarResultadoWhatsapp() {
+  let correctas = ultimoResultadoQuiz.correctas || calcularCorrectas();
+  let total = ultimoResultadoQuiz.total || preguntasActuales.length;
+  let tiempoTexto =
+    ultimoResultadoQuiz.tiempo || obtenerTiempoTranscurridoTexto();
+
+  let mensaje =
+    "Hola, soy " +
+    participante.nombre +
+    ". Mi resultado en el quiz de " +
+    obtenerNombreTema(temaSeleccionado) +
+    " fue " +
+    correctas +
+    "/" +
+    total +
+    ". Tiempo: " +
+    tiempoTexto +
+    ".";
+
+  let url = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+  window.open(url, "_blank");
+}
+
+function cerrarSesionQuiz() {
+  abrirModalQuiz(
+    "Cerrar sesión",
+    "Se borrará el registro local de este navegador y volverás a la pantalla de registro. Tus últimas notas también se limpiarán para este navegador.",
+    function () {
+      localStorage.removeItem("participanteQuizContaUI");
+      localStorage.removeItem("ultimaNotaQuiz_todos");
+      localStorage.removeItem("ultimaNotaQuiz_iva");
+      localStorage.removeItem("ultimaNotaQuiz_tarifa0");
+      localStorage.removeItem("ultimaNotaQuiz_subtotal");
+      localStorage.removeItem("ultimaNotaQuiz_formulario104");
+
+      participante = {
+        nombre: "",
+        correo: "",
+      };
+
+      preguntasActuales = [];
+      respuestasUsuario = [];
+      preguntaActual = 0;
+      detenerTemporizadorQuiz();
+
+      if (obtenerElemento("nombreParticipante") !== null) {
+        obtenerElemento("nombreParticipante").value = "";
+      }
+
+      if (obtenerElemento("correoParticipante") !== null) {
+        obtenerElemento("correoParticipante").value = "";
+      }
+
+      cargarUltimasNotasTemas();
+      mostrarPantallaQuiz("quizRegistro");
+    },
+  );
+}
+
+prepararModalQuiz();
+cargarParticipanteLocal();
+cargarUltimasNotasTemas();
 revisarParametroTema();
