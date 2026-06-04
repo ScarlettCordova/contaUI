@@ -2887,6 +2887,7 @@ a {
 :root[data-theme="light"] .sri-form-table,
 :root[data-theme="light"] .sri-row input {
   background: #ffffff;
+  color: black !important;
 }
 
 :root[data-theme="light"]
