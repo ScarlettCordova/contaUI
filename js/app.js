@@ -1,5 +1,16 @@
-function obtenerElemento(id) {
-  return document.getElementById(id);
+function irARecurso(tema) {
+  mostrarVista("aprender", tema);
+
+  let contenedorAprender = obtenerElemento("aprender");
+
+  if (contenedorAprender !== null) {
+    setTimeout(function () {
+      contenedorAprender.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 80);
+  }
 }
 
 function mostrarVista(idVista, idTema = "overview") {
@@ -22,6 +33,10 @@ function mostrarVista(idVista, idTema = "overview") {
     mostrarTema(idTema);
   }
 
+  if (idVista === "quiz" && typeof prepararQuizAlEntrar === "function") {
+    prepararQuizAlEntrar();
+  }
+
   window.scrollTo({
     top: 0,
     behavior: "smooth",
@@ -42,8 +57,38 @@ function actualizarNavPrincipal(idVista) {
   }
 }
 
+function alternarSidebarRecursos() {
+  let sidebar = document.querySelector(".docs-sidebar");
+  let backdrop = document.getElementById("docsSidebarBackdrop");
+
+  if (sidebar !== null) {
+    sidebar.classList.toggle("open");
+  }
+
+  if (backdrop !== null) {
+    backdrop.classList.toggle("show");
+  }
+}
+
+function cerrarSidebarRecursos() {
+  let sidebar = document.querySelector(".docs-sidebar");
+  let backdrop = document.getElementById("docsSidebarBackdrop");
+
+  if (sidebar !== null) {
+    sidebar.classList.remove("open");
+  }
+
+  if (backdrop !== null) {
+    backdrop.classList.remove("show");
+  }
+}
+
 function controlarTabs(idVista) {
   let tabs = obtenerElemento("topicTabs");
+
+  if (tabs === null) {
+    return;
+  }
 
   if (idVista === "aprender") {
     tabs.classList.add("visible");
@@ -133,20 +178,6 @@ function cargarContadorGithub() {
   }
 
   obtenerElemento("contadorGithub").innerText = clicks;
-}
-
-function suscripcionDemo(event) {
-  event.preventDefault();
-  alert(
-    "Suscripción de ejemplo. Luego se puede conectar a Supabase o Google Sheets.",
-  );
-}
-
-function copiarResumen() {
-  let texto =
-    "Unidad 3: IVA, productos tarifa 0%, subtotal, total factura, facturación electrónica, declaraciones y Formulario 104.";
-  navigator.clipboard.writeText(texto);
-  alert("Resumen copiado.");
 }
 
 cargarContadorGithub();
