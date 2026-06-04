@@ -184,7 +184,7 @@ function obtenerPreguntasPorTema(tema) {
     let temas = ["iva", "tarifa0", "subtotal", "formulario104"];
 
     for (let i = 0; i < temas.length; i++) {
-      let preguntasTema = mezclarArray(bancoPreguntas[temas[i]]).slice(0, 3);
+      let preguntasTema = mezclarArray(bancoPreguntas[temas[i]]).slice(0, 2);
 
       for (let j = 0; j < preguntasTema.length; j++) {
         preguntas.push(preguntasTema[j]);
@@ -193,7 +193,7 @@ function obtenerPreguntasPorTema(tema) {
 
     preguntas = mezclarArray(preguntas);
   } else {
-    preguntas = mezclarArray(bancoPreguntas[tema]).slice(0, 10);
+    preguntas = mezclarArray(bancoPreguntas[tema]).slice(0, 5);
   }
 
   let preparadas = [];
@@ -246,6 +246,7 @@ function pintarPregunta() {
 
   obtenerElemento("questionNumber").innerText =
     "Pregunta " + (preguntaActual + 1);
+
   obtenerElemento("questionText").innerText = pregunta.texto;
   obtenerElemento("quizProgressText").innerText =
     preguntaActual + 1 + " / " + preguntasActuales.length;
@@ -559,6 +560,7 @@ function finalizarCuestionario() {
 
   guardarUltimaNotaTema(temaSeleccionado, correctas, total);
   guardarResultadoLocalStorage(correctas, total, tiempoTexto);
+  guardarResultadoSupabase(correctas, total, tiempoTexto);
 
   let resultadoCard = document.querySelector(".quiz-result-card");
   let botonReforzar = obtenerElemento("btnReforzarTema");
@@ -580,7 +582,7 @@ function finalizarCuestionario() {
   } else if (correctas >= Math.ceil(total * 0.5)) {
     resultadoCard.classList.add("warning");
     obtenerElemento("resultadoTitulo").innerText =
-      "Vas bien, " + participante.nombre;
+      "Genial, " + participante.nombre;
     obtenerElemento("resultadoDetalle").innerText =
       "Respondiste " +
       correctas +
@@ -590,7 +592,7 @@ function finalizarCuestionario() {
   } else {
     resultadoCard.classList.add("danger");
     obtenerElemento("resultadoTitulo").innerText =
-      "Necesitas reforzar, " + participante.nombre;
+      "Losiento, " + participante.nombre;
     obtenerElemento("resultadoDetalle").innerText =
       "Respondiste " +
       correctas +
@@ -632,6 +634,26 @@ function revisarParametroTema() {
   }
 }
 
+// detalle para mandar a supabase
+function crearDetalleRespuestas() {
+  let detalle = [];
+
+  for (let i = 0; i < preguntasActuales.length; i++) {
+    detalle.push({
+      numero: i + 1,
+      pregunta: preguntasActuales[i].texto,
+      respuesta_usuario: respuestasUsuario[i],
+      respuesta_correcta: preguntasActuales[i].correcta,
+      estado:
+        respuestasUsuario[i] === preguntasActuales[i].correcta
+          ? "correcta"
+          : "incorrecta",
+    });
+  }
+
+  return detalle;
+}
+
 function guardarResultadoLocalStorage(correctas, total, tiempoTexto) {
   let resultados = localStorage.getItem("resultadosQuizContaUI");
 
@@ -654,12 +676,46 @@ function guardarResultadoLocalStorage(correctas, total, tiempoTexto) {
   localStorage.setItem("resultadosQuizContaUI", JSON.stringify(resultados));
 }
 
+// guardar en supabase
+async function guardarResultadoSupabase(correctas, total, tiempoTexto) {
+  if (typeof supabaseClient === "undefined") {
+    console.log("Supabase todavía no está configurado.");
+    return;
+  }
+
+  let porcentaje = Math.round((correctas / total) * 100);
+
+  let resultado = {
+    nombre: participante.nombre,
+    correo: participante.correo,
+    tema: obtenerNombreTema(temaSeleccionado),
+    correctas: correctas,
+    total: total,
+    porcentaje: porcentaje,
+    tiempo: tiempoTexto,
+    fecha_local: new Date().toLocaleString(),
+    respuestas: crearDetalleRespuestas(),
+  };
+
+  let respuesta = await supabaseClient
+    .from("quiz_resultados")
+    .insert([resultado]);
+
+  if (respuesta.error) {
+    console.log("Error al guardar en Supabase:", respuesta.error.message);
+    return;
+  }
+
+  console.log("Resultado guardado en Supabase correctamente.");
+}
+
 function enviarResultadoWhatsapp() {
   let correctas = ultimoResultadoQuiz.correctas || calcularCorrectas();
   let total = ultimoResultadoQuiz.total || preguntasActuales.length;
   let tiempoTexto =
     ultimoResultadoQuiz.tiempo || obtenerTiempoTranscurridoTexto();
 
+  let numero = 593963313195;
   let mensaje =
     "Hola, soy " +
     participante.nombre +
@@ -673,7 +729,8 @@ function enviarResultadoWhatsapp() {
     tiempoTexto +
     ".";
 
-  let url = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+  let url =
+    "https://wa.me/" + `${numero}` + "?text=" + encodeURIComponent(mensaje);
   window.open(url, "_blank");
 }
 

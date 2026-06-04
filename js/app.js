@@ -27,7 +27,6 @@ function mostrarVista(idVista, idTema = "overview") {
   }
 
   actualizarNavPrincipal(idVista);
-  controlarTabs(idVista);
 
   if (idVista === "aprender") {
     mostrarTema(idTema);
@@ -59,7 +58,7 @@ function actualizarNavPrincipal(idVista) {
 
 function alternarSidebarRecursos() {
   let sidebar = document.querySelector(".docs-sidebar");
-  let backdrop = document.getElementById("docsSidebarBackdrop");
+  let backdrop = obtenerElemento("docsSidebarBackdrop");
 
   if (sidebar !== null) {
     sidebar.classList.toggle("open");
@@ -80,20 +79,6 @@ function cerrarSidebarRecursos() {
 
   if (backdrop !== null) {
     backdrop.classList.remove("show");
-  }
-}
-
-function controlarTabs(idVista) {
-  let tabs = obtenerElemento("topicTabs");
-
-  if (tabs === null) {
-    return;
-  }
-
-  if (idVista === "aprender") {
-    tabs.classList.add("visible");
-  } else {
-    tabs.classList.remove("visible");
   }
 }
 
@@ -167,7 +152,8 @@ function contarGithub() {
   localStorage.setItem("githubClicks", clicks);
   obtenerElemento("contadorGithub").innerText = clicks;
 
-  alert("Aquí puedes colocar el enlace real del repositorio de GitHub.");
+  let url = "https://github.com/ScarlettCordova/contaUI";
+  window.open(url, "_blank");
 }
 
 function cargarContadorGithub() {
